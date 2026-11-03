@@ -4,15 +4,23 @@ import { CONFIG } from "../config.js";
 
 const DB_FILE = path.join(CONFIG.dataDir, "database.json");
 
-const DEFAULT_STARTER_CARDS = {
-  c001_kim: 1, c002_moc: 1, c003_thuy: 1,
-  c026_hoa: 1, c027_tho: 1, c028_kim: 1,
-  c051_moc: 1, c052_thuy: 1, c053_hoa: 1,
-  c069_tho: 1, c070_kim: 1, c071_moc: 1,
-  c085_thuy: 1, c086_hoa: 1, c087_tho: 1
+/**
+ * 15 Default Starter Cards gifted on first Google Login when the player has 0 cards:
+ * - 3 Physical Offense: C001_kim, C002_moc, C003_thuy
+ * - 3 Magic Offense:    C021_hoa, C022_tho, C024_kim
+ * - 3 Tanker:           C041_moc, C042_thuy, C047_hoa
+ * - 3 Support:          C061_tho, C063_kim, C066_moc
+ * - 3 Items:            C081_thuy, C082_hoa, C085_tho
+ */
+export const DEFAULT_STARTER_15_CARDS = {
+  C001_kim: 1, C002_moc: 1, C003_thuy: 1,
+  C021_hoa: 1, C022_tho: 1, C024_kim: 1,
+  C041_moc: 1, C042_thuy: 1, C047_hoa: 1,
+  C061_tho: 1, C063_kim: 1, C066_moc: 1,
+  C081_thuy: 1, C082_hoa: 1, C085_tho: 1
 };
 
-const DEFAULT_LOADOUT_DECK = Object.keys(DEFAULT_STARTER_CARDS);
+export const DEFAULT_LOADOUT_DECK = Object.keys(DEFAULT_STARTER_15_CARDS);
 
 export class DataStore {
   constructor(customPath = DB_FILE) {
@@ -64,6 +72,16 @@ export class DataStore {
       existing.googleId = googleId || existing.googleId;
       existing.lastLoginAt = now;
       existing.platform = platform || existing.platform;
+
+      // If for any reason existing user had 0 cards, gift the 15 default starter cards
+      const totalOwned = Object.values(existing.ownedCounts || {}).reduce((acc, v) => acc + Number(v || 0), 0);
+      let giftedStarter = false;
+      if (totalOwned === 0) {
+        existing.ownedCounts = { ...DEFAULT_STARTER_15_CARDS };
+        existing.loadoutDeck = [...DEFAULT_LOADOUT_DECK];
+        giftedStarter = true;
+      }
+      existing.isFirstLogin = giftedStarter;
       this.save();
       return existing;
     }
@@ -76,10 +94,13 @@ export class DataStore {
       photoUrl: photoUrl || "",
       provider,
       platform,
-      gold: 3000,
-      diamonds: 450,
-      packCountsByType: { "1": 2, "2": 1, "3": 1, "4": 1, "5": 0 },
-      ownedCounts: { ...DEFAULT_STARTER_CARDS },
+      isFirstLogin: true,
+      starterGiftCount: 15,
+      starterGiftCards: [...DEFAULT_LOADOUT_DECK],
+      gold: 3500,
+      diamonds: 600,
+      packCountsByType: { "1": 4, "2": 3, "3": 2, "4": 2, "5": 1 },
+      ownedCounts: { ...DEFAULT_STARTER_15_CARDS },
       loadoutDeck: [...DEFAULT_LOADOUT_DECK],
       elo: 1200,
       stats: {
@@ -119,7 +140,6 @@ export class DataStore {
       user.packCountsByType = { ...user.packCountsByType, ...payload.packCountsByType };
     }
     if (payload.ownedCounts && typeof payload.ownedCounts === "object") {
-      // Merge owned 500-card inventory (keeping max owned count for offline->online merge safety)
       for (const [cardUid, cnt] of Object.entries(payload.ownedCounts)) {
         const num = Number(cnt || 0);
         if (num > 0) {
@@ -127,9 +147,15 @@ export class DataStore {
         }
       }
     }
-    if (Array.isArray(payload.loadoutDeck) && payload.loadoutDeck.length > 0) {
+    // Ensure a user always has at least the 15 starter cards
+    const totalOwned = Object.values(user.ownedCounts || {}).reduce((acc, v) => acc + Number(v || 0), 0);
+    if (totalOwned === 0) {
+      user.ownedCounts = { ...DEFAULT_STARTER_15_CARDS };
+      user.loadoutDeck = [...DEFAULT_LOADOUT_DECK];
+    } else if (Array.isArray(payload.loadoutDeck) && payload.loadoutDeck.length === 15) {
       user.loadoutDeck = payload.loadoutDeck.slice(0, 15).map(String);
     }
+
     user.updatedAt = new Date().toISOString();
     this.save();
     return user;

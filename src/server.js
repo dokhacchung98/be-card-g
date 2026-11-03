@@ -133,6 +133,8 @@ export function createAppServer(customOptions = {}) {
         return sendJson(res, 200, {
           ok: true,
           verifiedVia: verified.verifiedVia,
+          isFirstLogin: Boolean(user.isFirstLogin),
+          starterGiftCards: user.starterGiftCards || [],
           token: sessionToken,
           user,
           firebaseProject: CONFIG.firebase.projectId

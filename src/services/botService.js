@@ -45,34 +45,39 @@ const ELEMENTS = ["kim", "moc", "thuy", "hoa", "tho"];
 
 /**
  * Builds a valid 15-card Loadout Deck across the 4 role groups:
- * - Offense (c001..c050): 4 cards
- * - Tanker  (c051..c068): 4 cards
- * - Support (c069..c084): 4 cards
- * - Item    (c085..c100): 3 cards
+ * - Offense (C001..C040): 6 cards (3 phys + 3 mag)
+ * - Tanker  (C041..C060): 3 cards
+ * - Support (C061..C080): 3 cards
+ * - Item    (C081..C100): 3 cards
  */
 export function generateBotLoadoutDeck(seedIndex = 0) {
   const deck = [];
   const pickElem = (idx) => ELEMENTS[(idx + seedIndex) % ELEMENTS.length];
 
-  // 4 Offense cards
-  for (let i = 0; i < 4; i++) {
-    const num = ((seedIndex * 7 + i * 5) % 50) + 1;
-    deck.push(`c${String(num).padStart(3, "0")}_${pickElem(i)}`);
-  }
-  // 4 Tanker cards
-  for (let i = 0; i < 4; i++) {
-    const num = 51 + ((seedIndex * 3 + i * 4) % 18);
-    deck.push(`c${String(num).padStart(3, "0")}_${pickElem(i + 1)}`);
-  }
-  // 4 Support cards
-  for (let i = 0; i < 4; i++) {
-    const num = 69 + ((seedIndex * 3 + i * 3) % 16);
-    deck.push(`c${String(num).padStart(3, "0")}_${pickElem(i + 2)}`);
-  }
-  // 3 Item cards
+  // 3 Physical Offense cards (C001..C020)
   for (let i = 0; i < 3; i++) {
-    const num = 85 + ((seedIndex * 5 + i * 4) % 16);
-    deck.push(`c${String(num).padStart(3, "0")}_${pickElem(i + 3)}`);
+    const num = ((seedIndex * 3 + i * 5) % 20) + 1;
+    deck.push(`C${String(num).padStart(3, "0")}_${pickElem(i)}`);
+  }
+  // 3 Magic Offense cards (C021..C040)
+  for (let i = 0; i < 3; i++) {
+    const num = 21 + ((seedIndex * 3 + i * 5) % 20);
+    deck.push(`C${String(num).padStart(3, "0")}_${pickElem(i + 1)}`);
+  }
+  // 3 Tanker cards (C041..C060)
+  for (let i = 0; i < 3; i++) {
+    const num = 41 + ((seedIndex * 3 + i * 4) % 20);
+    deck.push(`C${String(num).padStart(3, "0")}_${pickElem(i + 2)}`);
+  }
+  // 3 Support cards (C061..C080)
+  for (let i = 0; i < 3; i++) {
+    const num = 61 + ((seedIndex * 3 + i * 4) % 20);
+    deck.push(`C${String(num).padStart(3, "0")}_${pickElem(i + 3)}`);
+  }
+  // 3 Item cards (C081..C100)
+  for (let i = 0; i < 3; i++) {
+    const num = 81 + ((seedIndex * 5 + i * 4) % 20);
+    deck.push(`C${String(num).padStart(3, "0")}_${pickElem(i + 4)}`);
   }
 
   return deck;

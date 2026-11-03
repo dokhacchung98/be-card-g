@@ -24,10 +24,30 @@ async function startTestServer(options = {}) {
   };
 }
 
-test("1. Google Auth Login, Profile & Offline-Online Sync", async () => {
+test("1. Google Auth First Login gifts 15 Default Starter Cards & Syncs Profile", async () => {
   const { baseUrl, close } = await startTestServer();
   try {
     const authRes = await fetch(`${baseUrl}/api/v1/auth/google`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        googleId: "10987654321",
+        email: "phapsu@gmail.com",
+        displayName: "Lam Long Pháp Sư",
+        platform: "android"
+      })
+    });
+    const authData = await authRes.json();
+    assert.equal(authData.ok, true);
+    assert.equal(authData.isFirstLogin, true);
+    assert.equal(authData.starterGiftCards.length, 15);
+    assert.equal(Object.keys(authData.user.ownedCounts).length, 15);
+    assert.equal(authData.user.loadoutDeck.length, 15);
+    assert.ok(authData.token);
+    assert.equal(authData.user.email, "phapsu@gmail.com");
+
+    // Second login with same Google account should have isFirstLogin = false
+    const authRes2 = await fetch(`${baseUrl}/api/v1/auth/google`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -38,17 +58,14 @@ test("1. Google Auth Login, Profile & Offline-Online Sync", async () => {
         offlineProfile: {
           gold: 4500,
           diamonds: 600,
-          ownedCounts: { c018_hoa: 2 }
+          ownedCounts: { C018_hoa: 2 }
         }
       })
     });
-    const authData = await authRes.json();
-    assert.equal(authData.ok, true);
-    assert.ok(authData.token);
-    assert.equal(authData.user.email, "phapsu@gmail.com");
-    assert.equal(authData.user.gold, 4500);
-    assert.equal(authData.user.diamonds, 600);
-    assert.equal(authData.user.ownedCounts.c018_hoa, 2);
+    const authData2 = await authRes2.json();
+    assert.equal(authData2.isFirstLogin, false);
+    assert.equal(authData2.user.gold, 4500);
+    assert.equal(authData2.user.ownedCounts.C018_hoa, 2);
   } finally {
     await close();
   }
