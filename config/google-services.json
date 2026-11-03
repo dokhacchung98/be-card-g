@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "673339667273",
+    "project_id": "arcana-five-card-g",
+    "storage_bucket": "arcana-five-card-g.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:673339667273:android:03922dbe27f2e78336a098",
+        "android_client_info": {
+          "package_name": "com.dochung.arcanafive"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNwlaipa2zxe27Z0lOAqxTgKv0WMD4XFk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,17 @@
+{
+  "name": "be-card-g",
+  "version": "1.0.0",
+  "description": "Lightweight Backend for Arcana Five: Wuxing Blood Cards (Google/Firebase Auth, 10s Matchmaking with Auto-Bot Fallback, Custom Rooms, Offline Sync, Crashlytics & Analytics)",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "node --test test/backend.test.js"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "Author": "dokhacchung98",
+  "license": "MIT"
+}

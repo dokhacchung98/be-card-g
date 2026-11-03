@@ -1,0 +1,32 @@
+{
+  "projectId": "arcana-five-card-g",
+  "projectName": "Arcana Five",
+  "projectNumber": "673339667273",
+  "packageName": "com.dochung.arcanafive",
+  "bundleId": "com.dochung.arcanafive",
+  "androidAppId": "1:673339667273:android:03922dbe27f2e78336a098",
+  "iosAppId": "1:673339667273:ios:8c700ab687abfdc236a098",
+  "webAppId": "1:673339667273:web:24654b1b2267e9e136a098",
+  "apiKey": "AIzaSyBf-cdTWa5rXQPFIcUXa1BI8b65Fp5u9M4",
+  "authDomain": "arcana-five-card-g.firebaseapp.com",
+  "storageBucket": "arcana-five-card-g.firebasestorage.app",
+  "messagingSenderId": "673339667273",
+  "services": {
+    "auth": {
+      "enabled": true,
+      "providers": ["google.com", "anonymous", "password"]
+    },
+    "crashlytics": {
+      "enabled": true,
+      "api": "firebasecrashlytics.googleapis.com"
+    },
+    "analytics": {
+      "enabled": true,
+      "api": "analytics.googleapis.com"
+    },
+    "firestore": {
+      "enabled": true,
+      "api": "firestore.googleapis.com"
+    }
+  }
+}

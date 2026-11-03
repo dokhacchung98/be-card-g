@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyBvWy-uJ3Ky2fhwkIRn_YVQ165HrKm0sQI</string>
+	<key>GCM_SENDER_ID</key>
+	<string>673339667273</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.dochung.arcanafive</string>
+	<key>PROJECT_ID</key>
+	<string>arcana-five-card-g</string>
+	<key>STORAGE_BUCKET</key>
+	<string>arcana-five-card-g.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:673339667273:ios:8c700ab687abfdc236a098</string>
+</dict>
+</plist>
