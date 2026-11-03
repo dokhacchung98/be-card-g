@@ -312,14 +312,18 @@ export function createAppServer(customOptions = {}) {
 
 const isMainModule =
   typeof process !== "undefined" &&
+  !process.env.VERCEL &&
   process.argv?.[1] &&
   import.meta.url === `file://${process.argv[1]}`;
 
+const defaultServer = createAppServer();
+
 if (isMainModule) {
-  const server = createAppServer();
-  server.listen(CONFIG.port, CONFIG.host, () => {
+  defaultServer.listen(CONFIG.port, CONFIG.host, () => {
     console.log(
       `[be-card-g] Arcana Five Backend listening on http://${CONFIG.host}:${CONFIG.port} (Firebase: ${CONFIG.firebase.projectId}, Matchmaking Bot Timeout: ${CONFIG.matchmakingTimeoutMs}ms)`
     );
   });
 }
+
+export default defaultServer.requestHandler;
