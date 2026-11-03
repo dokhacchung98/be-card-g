@@ -1,9 +1,11 @@
 import fs from "node:fs";
+import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT_DIR = path.resolve(__dirname, "..");
+const IS_VERCEL = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
 
 let firebaseConfig = {
   projectId: process.env.FIREBASE_PROJECT_ID || "arcana-five-card-g",
@@ -38,6 +40,6 @@ export const CONFIG = {
   jwtSecret: process.env.JWT_SECRET || "arcana-five-wuxing-secret-key-2026",
   matchmakingTimeoutMs: Number(process.env.MATCHMAKING_TIMEOUT_MS || 10000),
   roomAutoBotTimeoutMs: Number(process.env.ROOM_AUTO_BOT_TIMEOUT_MS || 10000),
-  dataDir: path.join(ROOT_DIR, "data"),
+  dataDir: IS_VERCEL ? path.join(os.tmpdir(), "arcana-five-data") : path.join(ROOT_DIR, "data"),
   firebase: firebaseConfig
 };

@@ -84,7 +84,7 @@ export function createAppServer(customOptions = {}) {
       // -----------------------------------------------------------------------
       // 1. Health & Firebase Status Check
       // -----------------------------------------------------------------------
-      if (req.method === "GET" && (pathname === "/health" || pathname === "/api/v1/health")) {
+      if (req.method === "GET" && (pathname === "/" || pathname === "/health" || pathname === "/api/v1/health")) {
         return sendJson(res, 200, {
           ok: true,
           service: "be-card-g (Arcana Five Backend)",
