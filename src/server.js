@@ -78,13 +78,19 @@ export function createAppServer(customOptions = {}) {
     }
 
     const parsedUrl = new URL(req.url || "/", `http://${req.headers.host || "localhost"}`);
-    const pathname = parsedUrl.pathname;
+    const rwPath = parsedUrl.searchParams.get("__pathname");
+    const pathname = rwPath
+      ? (rwPath.startsWith("/") ? rwPath : `/${rwPath}`).replace(/\/+$/, "") || "/"
+      : parsedUrl.pathname.replace(/\/+$/, "") || "/";
 
     try {
       // -----------------------------------------------------------------------
       // 1. Health & Firebase Status Check
       // -----------------------------------------------------------------------
-      if (req.method === "GET" && (pathname === "/" || pathname === "/health" || pathname === "/api/v1/health")) {
+      if (
+        req.method === "GET" &&
+        (pathname === "/" || pathname === "/api" || pathname === "/health" || pathname === "/api/v1/health")
+      ) {
         return sendJson(res, 200, {
           ok: true,
           service: "be-card-g (Arcana Five Backend)",
