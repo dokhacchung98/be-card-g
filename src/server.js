@@ -67,7 +67,7 @@ export function createAppServer(customOptions = {}) {
     return null;
   }
 
-  const server = http.createServer(async (req, res) => {
+  const requestHandler = async (req, res) => {
     if (req.method === "OPTIONS") {
       res.writeHead(204, {
         "Access-Control-Allow-Origin": "*",
@@ -301,14 +301,21 @@ export function createAppServer(customOptions = {}) {
         error: err.message || "Internal server error"
       });
     }
-  });
+  };
 
+  const server = http.createServer(requestHandler);
+  server.requestHandler = requestHandler;
   server.matchmakingService = matchmakingService;
   server.store = store;
   return server;
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+const isMainModule =
+  typeof process !== "undefined" &&
+  process.argv?.[1] &&
+  import.meta.url === `file://${process.argv[1]}`;
+
+if (isMainModule) {
   const server = createAppServer();
   server.listen(CONFIG.port, CONFIG.host, () => {
     console.log(
